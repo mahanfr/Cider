@@ -1,1 +1,2 @@
-# Cider\nC Package Manager cause javascript ruined us
+# Cider
+C Package Manager Cause Javascript Ruined Us
