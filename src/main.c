@@ -1,8 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #define APPNAME "Cider"
 #define VERSION "0.0.1-beta"
+
+#define SRCFOLDER "source"
 
 int cla_help() {
     static char* help = 
@@ -21,9 +25,29 @@ int cla_help() {
     return fprintf(stdout, "%s",help);
 }
 
+void set_binary_template() {
+    FILE* src_file = NULL;
+    static char* mftemplate = 
+        "#include <stdio.h>\n\n"
+        "int main(void) {\n"
+        "\tprintf(\"Hello World!\\n\");\n"
+        "\treturn 0;\n"
+        "}\n";
+    if(mkdir(SRCFOLDER, 0755) < 0) {
+        fprintf(stderr, "Error: can not create a file!\n");
+        exit(-1);
+    }
+    if((src_file = fopen(SRCFOLDER "/main.c", "w")) < 0) {
+        fprintf(stderr, "Error: can not create the main file!\n");
+        exit(-1);
+    }
+    fprintf(src_file, "%s", mftemplate);
+    fclose(src_file);
+}
+
 void cla_init(int index, int args, char **argv) {
     if (index >= args) {
-        printf("TODO: setup binary template!\n");
+        set_binary_template();
         return;
     }
     if (strcmp(argv[index], "--binary") == 0 | strcmp(argv[index], "-b") == 0) {
