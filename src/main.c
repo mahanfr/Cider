@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 #define MYSTD_IMPLEMENTATION
-#include "mystd.h"
+#include "../libs/mystd.h"
 
 #define APPNAME "Cider"
 #define VERSION "0.0.1-beta"
@@ -49,7 +49,7 @@ void set_binary_template(char* path) {
         exit(-1);
     }
     errno = 0;
-    char* npath = mystd_strcat(2,path,SRCFOLDER);
+    char* npath = mystd_strcat(path,SRCFOLDER);
     mkdir(npath, 0755);
     if(errno == EEXIST) {
         fprintf(stdout, "[Warning]: folder already exists\n");
@@ -60,13 +60,13 @@ void set_binary_template(char* path) {
     errno = 0;
     free(npath);
 
-    char* ncmd = mystd_strcat(2,"git init -q ",path);
+    char* ncmd = mystd_strcat("git init -q ",path);
     if(system(ncmd) < 0) {
         fprintf(stdout, "[Warning]: Git is not installed!\n");
     }
     free(ncmd);
 
-    char* srpath = mystd_strcat(3,path,SRCFOLDER,MAINFILE);
+    char* srpath = mystd_strcat(path,SRCFOLDER,MAINFILE);
     if((src_file = fopen(srpath, "w")) < 0) {
         fprintf(stderr, "[Error]: can not create the main file!\n");
         exit(-1);
